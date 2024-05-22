@@ -46,12 +46,6 @@ module.exports = (sequelize) => {
             args: new Date().toISOString().split('T')[0],
             msg: 'Date of birth cannot be in the future'
           },
-          isOldEnough(value) {
-            const age = moment().diff(moment(value, 'YYYY-MM-DD'), 'years');
-            if (age < 18) {
-              throw new Error('Must be at least 18 years old');
-            }
-          }
         }
       },
       nationality: {
@@ -70,12 +64,6 @@ module.exports = (sequelize) => {
       description: {
         type: DataTypes.STRING,
         allowNull: false,
-        validate: {
-          len: {
-            args: [20, 660],
-            msg: "Description should be between 20 and 660 characters",
-          },
-        },
       },
       image: {
         type: DataTypes.STRING,
