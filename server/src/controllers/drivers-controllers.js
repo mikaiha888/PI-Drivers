@@ -19,7 +19,7 @@ const getAllDriversController = async () => {
         image: driver.image ? driver.image.url : DEFAULT_IMAGE,
         teams: driver.teams?.split(/,\s*/)
       };
-    });
+    }).filter(driver => driver.id < 100);
   } catch (error) {
     throw error;
   }
