@@ -17,6 +17,7 @@ const getAllDriversController = async () => {
         nationality: driver.nationality,
         description: driver.description,
         image: driver.image ? driver.image.url : DEFAULT_IMAGE,
+        teams: driver.teams?.split(/,\s*/)
       };
     });
   } catch (error) {
@@ -30,8 +31,16 @@ const getDriverByIdController = async (id, source) => {
     if (source === "api") driver = (await axios.get(`${URL}/${id}`)).data;
     if (source === "db")
       driver = Driver.findByPk(id, { include: [{ model: Team, as: "teams" }] });
-    if (!driver.image) driver.image = DEFAULT_IMAGE;
-    return driver;
+    return {
+      id: driver.id,
+      firstName: driver.name.forename,
+      lastName: driver.name.surname,
+      dateOfBirth: driver.dob,
+      nationality: driver.nationality,
+      description: driver.description,
+      image: driver.image ? driver.image.url : DEFAULT_IMAGE,
+      teams: driver.teams?.split(/,\s*/)
+    };
   } catch (error) {
     throw error;
   }
@@ -70,7 +79,7 @@ const createDriverController = async (newDriverData) => {
     });
     const [newTeam] = await Team.findOrCreate({
       where: {
-        name: newDriverData.team,
+        name: newDriverData.teams,
       },
     });
     await newDriver.addTeam(newTeam);
