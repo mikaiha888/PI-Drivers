@@ -8,10 +8,17 @@ const DEFAULT_IMAGE = "";
 const getAllDriversController = async () => {
   try {
     const drivers = (await axios.get(URL)).data;
-    drivers.map(
-      (driver) => (driver.image = !driver.image ? DEFAULT_IMAGE : driver.image)
-    );
-    return drivers;
+    return drivers.map((driver) => {
+      return {
+        id: driver.id,
+        firstName: driver.name.forename,
+        lastName: driver.name.surname,
+        dateOfBirth: driver.dob,
+        nationality: driver.nationality,
+        description: driver.description,
+        image: driver.image ? driver.image.url : DEFAULT_IMAGE,
+      };
+    });
   } catch (error) {
     throw error;
   }
@@ -58,7 +65,7 @@ const createDriverController = async (newDriverData) => {
         dateOfBirth: newDriverData.dateOfBirth,
         nationality: newDriverData.nationality,
         description: newDriverData.description,
-        image: newDriverData.image
+        image: newDriverData.image,
       },
     });
     const [newTeam] = await Team.findOrCreate({
@@ -68,9 +75,9 @@ const createDriverController = async (newDriverData) => {
     });
     await newDriver.addTeam(newTeam);
     return {
-        ...newDriver.dataValues,
-        teams: [newTeam],
-    }
+      ...newDriver.dataValues,
+      teams: [newTeam],
+    };
   } catch (error) {
     throw error;
   }
