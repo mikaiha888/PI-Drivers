@@ -1,6 +1,11 @@
+import Cards from "../../components/cards/Cards";
+
 const DriversPage = () => {
   return (
-    <div>DriversPage</div>
-  )
-}
-export default DriversPage
+    <>
+      <h2>Drivers</h2>
+      <Cards />
+    </>
+  );
+};
+export default DriversPage;
