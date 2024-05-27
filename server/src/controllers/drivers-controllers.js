@@ -1,25 +1,30 @@
 const axios = require("axios");
 const { Driver, Team } = require("../db");
 const { Op } = require("sequelize");
+const { getImage } = require("./utils");
 
 const URL = "http://localhost:5000/drivers";
-const DEFAULT_IMAGE = "";
 
 const getAllDriversController = async () => {
   try {
     const drivers = (await axios.get(URL)).data;
-    return drivers.map((driver) => {
-      return {
-        id: driver.id,
-        firstName: driver.name.forename,
-        lastName: driver.name.surname,
-        dateOfBirth: driver.dob,
-        nationality: driver.nationality,
-        description: driver.description,
-        image: driver.image ? driver.image.url : DEFAULT_IMAGE,
-        teams: driver.teams?.split(/,\s*/)
-      };
-    }).filter(driver => driver.id < 100);
+    return await Promise.all(
+      drivers
+        .filter((driver) => driver.id < 100)
+        .map(async (driver) => {
+          driver.image = await getImage(driver.image.url);
+          return {
+            id: driver.id,
+            firstName: driver.name.forename,
+            lastName: driver.name.surname,
+            dateOfBirth: driver.dob,
+            nationality: driver.nationality,
+            description: driver.description,
+            image: driver.image,
+            teams: driver.teams?.split(/,\s*/),
+          };
+        })
+    );
   } catch (error) {
     throw error;
   }
@@ -39,7 +44,7 @@ const getDriverByIdController = async (id, source) => {
       nationality: driver.nationality,
       description: driver.description,
       image: driver.image ? driver.image.url : DEFAULT_IMAGE,
-      teams: driver.teams?.split(/,\s*/)
+      teams: driver.teams?.split(/,\s*/),
     };
   } catch (error) {
     throw error;
