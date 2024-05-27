@@ -33,19 +33,37 @@ const getAllDriversController = async () => {
 const getDriverByIdController = async (id, source) => {
   try {
     let driver;
-    if (source === "api") driver = (await axios.get(`${URL}/${id}`)).data;
-    if (source === "db")
-      driver = Driver.findByPk(id, { include: [{ model: Team, as: "teams" }] });
-    return {
-      id: driver.id,
-      firstName: driver.name.forename,
-      lastName: driver.name.surname,
-      dateOfBirth: driver.dob,
-      nationality: driver.nationality,
-      description: driver.description,
-      image: driver.image ? driver.image.url : DEFAULT_IMAGE,
-      teams: driver.teams?.split(/,\s*/),
-    };
+    if (source === "db") {
+      driver = await Driver.findByPk(id, {
+        include: [{ model: Team, as: "teams" }],
+      });
+      console.log(driver);
+      return {
+        id: driver.id,
+        firstName: driver.firstName,
+        lastName: driver.lastName,
+        dateOfBirth: driver.dateOfBirth,
+        nationality: driver.nationality,
+        description: driver.description,
+        image: driver.image,
+        teams: driver.teams.map((team) => {
+          return { id: team.id, name: team.name };
+        }),
+      };
+    }
+    if (source === "api") {
+      driver = (await axios.get(`${URL}/${id}`)).data;
+      return {
+        id: driver.id,
+        firstName: driver.name.forename,
+        lastName: driver.name.surname,
+        dateOfBirth: driver.dob,
+        nationality: driver.nationality,
+        description: driver.description,
+        image: driver.image ? driver.image.url : DEFAULT_IMAGE,
+        teams: driver.teams?.split(/,\s*/),
+      };
+    }
   } catch (error) {
     throw error;
   }
@@ -56,7 +74,7 @@ const getDriversByNameController = async (name) => {
     const apiDrivers = await Promise.all(
       (
         await getAllDriversController()
-      ).filter((d) => d.name.forename.toLowerCase().includes(name))
+      ).filter((d) => d.firstName.toLowerCase().includes(name))
     );
     const dbDrivers = await Driver.findAll({
       where: { firstName: { [Op.iLike]: `%${name}%` } },
@@ -87,6 +105,7 @@ const createDriverController = async (newDriverData) => {
         name: newDriverData.teams,
       },
     });
+    console.log(newTeam);
     await newDriver.addTeam(newTeam);
     return {
       ...newDriver.dataValues,
