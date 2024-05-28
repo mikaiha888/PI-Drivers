@@ -1,11 +1,18 @@
+import style from "./Searchbar.module.css";
+
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 import { Search } from "lucide-react";
-import { getDriversByName } from "../../redux/actions";
+import { useNavigate } from "react-router-dom";
 
 const Searchbar = ({ handlePage }) => {
-  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [query, setQuery] = useState("");
+  const [isActive, setIsActive] = useState(false);
+
+  const toggleSearchInput = () => {
+    console.log(isActive);
+    setIsActive(!isActive);
+  };
 
   const handleChange = (e) => {
     setQuery(e.target.value);
@@ -13,18 +20,30 @@ const Searchbar = ({ handlePage }) => {
   };
 
   const handleSearch = () => {
-    dispatch(getDriversByName(query));
-    handlePage();
+    if (query === "") setIsActive(false);
+    else {
+      navigate(`/drivers?name=${query}`)
+      handlePage();
+    }
   };
 
   const handleEnter = (e) => {
-    e.keyCode == 13 && dispatch(getDriversByName(query));
+    if (e.keyCode == 13) {
+      navigate(`/drivers?name=${query}`);
+      handlePage()
+    } 
   };
 
   return (
-    <div>
-      <input type="search" onChange={handleChange} onKeyDown={handleEnter} />
-      <button onClick={handleSearch}>
+    <div className={style.searchbar}>
+      <input
+        type="search"
+        onChange={handleChange}
+        onKeyDown={handleEnter}
+        placeholder="Search driver..."
+        className={`${style.search_input} ${isActive ? style.active : ""}`}
+      />
+      <button onClick={isActive ? handleSearch : toggleSearchInput}>
         <Search />
       </button>
     </div>

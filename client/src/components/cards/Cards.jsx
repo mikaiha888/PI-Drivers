@@ -1,20 +1,14 @@
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-
+import style from "./Cards.module.css";
 import Card from "../card/Card";
-import { getAllDrivers } from "../../redux/actions";
 
-const Cards = () => {
-  const dispatch = useDispatch();
-  const { allDrivers } = useSelector((state) => state);
-
-  useEffect(() => {
-    dispatch(getAllDrivers());
-  }, []);
+const Cards = ({ allDrivers, currentPage, itemsPerPage}) => {
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentDrivers = allDrivers?.slice(startIndex, endIndex);
 
   return (
-    <div>
-      {allDrivers.map((driver) => (
+    <div className={style.cards}>
+      {currentDrivers?.map((driver) => (
         <Card key={driver.id} driver={driver} />
       ))}
     </div>

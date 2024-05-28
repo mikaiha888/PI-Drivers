@@ -1,25 +1,30 @@
-import NavButton from "../nav-button/NavButton";
+import style from "./NavBar.module.css";
+import { useLocation, Link } from "react-router-dom";
+
+import Searchbar from "../searchbar/Searchbar";
 
 const NavBar = () => {
+  const { pathname } = useLocation();
+
   const navButtons = [
     { link: "/home", buttonName: "Home" },
     { link: "/drivers", buttonName: "Drivers" },
-    { link: "/about-us", buttonName: "About us" },
+    { link: "/teams", buttonName: "Teams" },
   ];
 
   return (
-    <nav>
-      <h1><span>D</span>rivers</h1>
-      <div>
-        {navButtons.map((navButton, index) => (
-          <NavButton
-            key={index}
-            link={navButton.link}
-            buttonName={navButton.buttonName}
-          />
-        ))}
-      </div>
-    </nav>
+    pathname !== "/home" && (
+      <nav className={style.navbar}>
+        <div className={style.button_container}>
+          {navButtons.map((navButton, index) => (
+            <Link key={index} to={navButton.link}>
+              <button>{navButton.buttonName}</button>
+            </Link>
+          ))}
+          <Searchbar />
+        </div>
+      </nav>
+    )
   );
 };
 export default NavBar;

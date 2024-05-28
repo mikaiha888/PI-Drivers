@@ -1,16 +1,17 @@
+import style from "./Card.module.css";
+import { Link } from "react-router-dom";
+
 const Card = ({ driver }) => {
   return (
-    <div>
-      <div>
-        <img src={driver.image.url} alt={driver.id} />
+    <Link className={style.card} to={`/drivers/${driver.id}`}>
+      <div className={style.card_img}>
+        <img src={driver.image} alt={driver.id} />
       </div>
-      <div>
-        <h3>{`${driver.name.forename} ${driver.name.surname}`}</h3>
-        <p>{driver.dob}</p>
-        <p>{driver.nationality}</p>
-        <p>{driver.description}</p>
+      <div className={style.card_info}>
+        <h3>{`${driver.firstName} ${driver.lastName}`}</h3>
+        <p>{driver.teams?.join(', ')}</p>
       </div>
-    </div>
+    </Link>
   );
 };
 export default Card;

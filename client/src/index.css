@@ -8,13 +8,21 @@
 }
 
 .container {
-  width: 100vw;
+  max-width: 100vw;
   min-height: 100vh;
+  background-color: #f3f4f6;
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
 main {
+  width: 100%;
   flex: 1 1 auto;
+}
+
+button {
+  cursor: pointer;
 }
