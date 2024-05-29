@@ -33,7 +33,7 @@ const DriverDetailPage = () => {
       <div className={style.driver_detail_info}>
         <h3>Descripción:</h3>
         <div className={style.description}>
-          <p>{driver.description}</p>
+          <p>{driver.description ? driver.description : 'Descripción no disponible'}</p>
         </div>
         <div className={style.teams}>
           <h3>Teams:</h3>
