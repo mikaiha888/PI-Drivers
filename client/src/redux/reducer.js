@@ -8,7 +8,7 @@ import {
   SORT_DRIVERS,
   CLEAR_DRIVERS,
   FETCH_ERROR,
-  HANDLE_ERROR
+  HANDLE_ERROR,
 } from "./action-type";
 
 const initialState = {
@@ -17,17 +17,66 @@ const initialState = {
   driver: {},
   team: {},
   filteredDrivers: [],
+  sortCriteria: { sortBy: "name", sort: "ascending" },
   fetchError: null,
 };
 
+const filterDrivers = (drivers, filter) => {
+  let filteredDrivers = [...drivers];
+  if (filter[0] === "byTeams") {
+    if (filter[1] === "all") filteredDrivers = drivers;
+    else
+      filteredDrivers = drivers.filter((driver) =>
+        driver.teams?.includes(filter[1])
+      );
+  }
+  if (filter[0] === "byDb") {
+    if (filter[1] === "all") filteredDrivers = drivers;
+    if (filter[1] === "db")
+      filteredDrivers = drivers.filter((driver) => isNaN(driver.id));
+    if (filter[1] === "api")
+      filteredDrivers = drivers.filter((driver) => !isNaN(driver.id));
+  }
+  return filteredDrivers;
+};
+
+const sortDrivers = (drivers, sort) => {
+  let sortedDrivers = [...drivers];
+  console.log(sort);
+  if (sort.sortBy === "name") {
+    sortedDrivers = sortedDrivers.sort((a, b) => {
+      const nameComparison = a.firstName.localeCompare(b.firstName);
+      if (nameComparison !== 0) {
+        return sort.sort === "ascending" ? nameComparison : -nameComparison;
+      }
+      const lastNameComparison = a.lastName.localeCompare(b.lastName);
+      return sort.sort === "ascending"
+        ? lastNameComparison
+        : -lastNameComparison;
+    });
+  }
+  if (sort.sortBy === "dob") {
+    sortedDrivers =
+      sort.sort === "ascending"
+        ? drivers.sort(
+            (a, b) => new Date(a.dateOfBirth) - new Date(b.dateOfBirth)
+          )
+        : drivers.sort(
+            (a, b) => new Date(b.dateOfBirth) - new Date(a.dateOfBirth)
+          );
+  }
+  return sortedDrivers;
+};
+
 const reducer = (state = initialState, action) => {
-  let filteredDrivers = [...state.allDrivers];
-  let sortedDrivers = [...state.allDrivers];
   switch (action.type) {
     case GET_ALL_DRIVERS:
       return {
         ...state,
         allDrivers: action.payload.sort((a, b) =>
+          a.firstName.localeCompare(b.firstName)
+        ),
+        filteredDrivers: action.payload.sort((a, b) =>
           a.firstName.localeCompare(b.firstName)
         ),
       };
@@ -56,73 +105,41 @@ const reducer = (state = initialState, action) => {
         allTeams: action.payload,
       };
 
-    case FILTER_DRIVERS:
-      if (action.payload[0] === "byTeams") {
-        if (action.payload[1] === "all") filteredDrivers = state.allDrivers;
-        else
-          filteredDrivers = state.allDrivers.filter((driver) =>
-            driver.teams?.includes(action.payload[1])
-          );
-      }
-      if (action.payload[0] === "byDb") {
-        if (action.payload[1] === "all") filteredDrivers = state.allDrivers;
-        if (action.payload[1] === "db")
-          filteredDrivers = state.allDrivers.filter((driver) =>
-            isNaN(driver.id)
-          );
-        if (action.payload[1] === "api")
-          filteredDrivers = state.allDrivers.filter(
-            (driver) => !isNaN(driver.id)
-          );
-      }
-      return {
-        ...state,
-        filteredDrivers: filteredDrivers,
-      };
-
-    case SORT_DRIVERS:
-      if (action.payload.sortBy === "name") {
-        sortedDrivers =
-          action.payload.sort === "ascending"
-            ? state.filteredDrivers.sort((a, b) =>
-                a.firstName.localeCompare(b.firstName)
-              )
-            : state.filteredDrivers.sort((a, b) =>
-                b.firstName.localeCompare(a.firstName)
-              );
-      }
-      if (action.payload.sortBy === "dob") {
-        sortedDrivers =
-          action.payload.sort === "descending"
-            ? state.filteredDrivers.sort(
-                (a, b) => new Date(a.dateOfBirth) - new Date(b.dateOfBirth)
-              )
-            : state.filteredDrivers.sort(
-                (a, b) => new Date(b.dateOfBirth) - new Date(a.dateOfBirth)
-              );
-      }
+    case FILTER_DRIVERS: {
+      const filteredDrivers = filterDrivers(state.allDrivers, action.payload);
+      const sortedDrivers = sortDrivers(filteredDrivers, state.sortCriteria);
       return {
         ...state,
         filteredDrivers: sortedDrivers,
       };
+    }
+
+    case SORT_DRIVERS: {
+      const sortedDrivers = sortDrivers(state.filteredDrivers, action.payload);
+      return {
+        ...state,
+        filteredDrivers: sortedDrivers,
+        sortCriteria: action.payload,
+      };
+    }
 
     case CLEAR_DRIVERS:
       return {
         ...state,
-        filteredDrivers: [],
+        filteredDrivers: [...state.allDrivers],
       };
 
-      case FETCH_ERROR:
-        return {
-          ...state,
-          fetchError: [action.payload],
-        };
-  
-      case HANDLE_ERROR:
-        return {
-          ...state,
-          fetchError: state.fetchError.slice(1),
-        };
+    case FETCH_ERROR:
+      return {
+        ...state,
+        fetchError: [action.payload],
+      };
+
+    case HANDLE_ERROR:
+      return {
+        ...state,
+        fetchError: state.fetchError.slice(1),
+      };
 
     default:
       return {

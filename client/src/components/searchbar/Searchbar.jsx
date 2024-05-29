@@ -4,34 +4,30 @@ import { useState } from "react";
 import { Search } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-const Searchbar = ({ handlePage }) => {
+const Searchbar = () => {
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
   const [isActive, setIsActive] = useState(false);
 
   const toggleSearchInput = () => {
-    console.log(isActive);
     setIsActive(!isActive);
   };
 
   const handleChange = (e) => {
     setQuery(e.target.value);
-    handlePage();
   };
 
   const handleSearch = () => {
     if (query === "") setIsActive(false);
     else {
-      navigate(`/drivers?name=${query}`)
-      handlePage();
+      navigate(`/drivers?name=${query}`);
     }
   };
 
   const handleEnter = (e) => {
     if (e.keyCode == 13) {
       navigate(`/drivers?name=${query}`);
-      handlePage()
-    } 
+    }
   };
 
   return (

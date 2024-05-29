@@ -68,7 +68,8 @@ const updateDriver = async (req, res) => {
 
 const deleteDriver = async (req, res) => {
   try {
-    const response = await deleteDriverController();
+    const { id } = req.params;
+    const response = await deleteDriverController(id);
     res.status(200).json(response);
   } catch (error) {
     res.status(500).send(error.message);

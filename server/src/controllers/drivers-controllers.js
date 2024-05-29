@@ -118,20 +118,36 @@ const createDriverController = async (newDriverData) => {
       teams: newTeams,
     };
   } catch (error) {
-    console.error('Error in createDriverController:', error);
     throw error;
   }
 };
 
-const updateDriverController = async () => {
+const updateDriverController = async (updatedDriverData) => {
   try {
+    const [numberOfAffectedRows, affectedRows] = await Driver.update(
+      updatedDriverData,
+      {
+        where: {
+          id: updatedDriverData.id
+        },
+        returning: true
+      }
+    );
+    if (numberOfAffectedRows === 0) throw new Error("Driver not found");
+    const updatedDriver = affectedRows[0];
+    return updatedDriver;
   } catch (error) {
     throw error;
   }
 };
 
-const deleteDriverController = async () => {
+const deleteDriverController = async (id) => {
   try {
+    const numberOfDeletedRows = await Driver.destroy({
+      where: { id: id },
+    });
+    if (numberOfDeletedRows === 0) throw new Error("Driver not found");
+    return { message: "Driver deleted successfully" };
   } catch (error) {
     throw error;
   }

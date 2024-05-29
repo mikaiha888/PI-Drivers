@@ -14,6 +14,6 @@ driversRouter.get("/", getAllDrivers);
 driversRouter.get("/:id", getDriverById);
 driversRouter.post("/", createDriver);
 driversRouter.put("/", updateDriver);
-driversRouter.delete("/", deleteDriver);
+driversRouter.delete("/:id", deleteDriver);
 
 module.exports = driversRouter;

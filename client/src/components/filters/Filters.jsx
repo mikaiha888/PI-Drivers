@@ -1,7 +1,12 @@
-import style from './Filters.module.css';
+import style from "./Filters.module.css";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { clearDrivers, filterDrivers, getAllTeams, sortDrivers } from "../../redux/actions";
+import {
+  clearDrivers,
+  filterDrivers,
+  getAllTeams,
+  sortDrivers,
+} from "../../redux/actions";
 import { useNavigate } from "react-router-dom";
 
 const Filters = ({ handlePage, isCreated }) => {
@@ -28,12 +33,20 @@ const Filters = ({ handlePage, isCreated }) => {
 
   const handleFilter = (e) => {
     const { name, value } = e.target;
-    if (name === "byTeams") setFilterByTeams(value);
-    console.log([name, value]);
-    if (name === "byDb") setFilterByDb(value);
+    if (name === "byTeams") {
+      setFilterByTeams(value);
+      setFilterByDb("all");
+    }
+    if (name === "byDb") {
+      setFilterByDb(value);
+      setFilterByTeams({
+        sortBy: "name",
+        sort: "ascending",
+      });
+    }
     dispatch(filterDrivers([name, value]));
     handlePage();
-    navigate('')
+    navigate("");
   };
 
   const handleClear = () => {
@@ -43,8 +56,8 @@ const Filters = ({ handlePage, isCreated }) => {
       sortBy: "name",
       sort: "ascending",
     });
-    dispatch(clearDrivers())
-    navigate('')
+    dispatch(clearDrivers());
+    navigate("");
   };
 
   useEffect(() => {
@@ -53,6 +66,25 @@ const Filters = ({ handlePage, isCreated }) => {
 
   return (
     <div className={style.filters}>
+      <div className={style.filter}>
+        <span>Equipos: </span>
+        <select name="byTeams" value={filterByTeams} onChange={handleFilter}>
+          <option value="all">All teams</option>
+          {allTeams.map((team, index) => (
+            <option key={index} value={team}>
+              {team}
+            </option>
+          ))}
+        </select>
+        <span>Filtrar por: </span>
+        <select name="byDb" value={filterByDb} onChange={handleFilter}>
+          <option value="all">All drivers</option>
+          <option value="db" disabled={isCreated}>
+            Creados recientemente
+          </option>
+          <option value="api">Cargados previamente</option>
+        </select>
+      </div>
       <div className={style.sort}>
         <span>Ordenar por: </span>
         <select name="sortBy" value={sortOrder.sortBy} onChange={handleSort}>
@@ -62,21 +94,6 @@ const Filters = ({ handlePage, isCreated }) => {
         <select name="sort" value={sortOrder.sort} onChange={handleSort}>
           <option value="ascending">Ascendente</option>
           <option value="descending">Descendente</option>
-        </select>
-      </div>
-      <div className={style.filter}>
-        <span>Equipos: </span>
-        <select name="byTeams" value={filterByTeams} onChange={handleFilter}>
-          <option value="all">All teams</option>
-          {allTeams.map((team, index) => (
-            <option key={index} value={team}>{team}</option>
-          ))}
-        </select>
-        <span>Filtrar por: </span>
-        <select name="byDb" value={filterByDb} onChange={handleFilter}>
-          <option value="all">All drivers</option>
-          <option value="db" disabled={isCreated} >Creados recientemente</option>
-          <option value="api">Cargados previamente</option>
         </select>
       </div>
       <button onClick={handleClear}>Clear</button>

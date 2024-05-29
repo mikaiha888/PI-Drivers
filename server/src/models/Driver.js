@@ -38,15 +38,6 @@ module.exports = (sequelize) => {
       dateOfBirth: {
         type: DataTypes.DATEONLY,
         allowNull: false,
-        validate: {
-          isDate: {
-            msg: 'Must be a valid date'
-          },
-          isBefore: {
-            args: new Date().toISOString().split('T')[0],
-            msg: 'Date of birth cannot be in the future'
-          },
-        }
       },
       nationality: {
         type: DataTypes.STRING,
@@ -68,7 +59,7 @@ module.exports = (sequelize) => {
       image: {
         type: DataTypes.STRING,
         allowNull: false,
-        isUrl: true
+        isUrl: true,
       },
     },
     { timestamps: false }
