@@ -2,7 +2,7 @@ const { DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
   sequelize.define(
-    "teams",
+    "team",
     {
       id: {
         type: DataTypes.UUID,
@@ -12,13 +12,11 @@ module.exports = (sequelize) => {
       name: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: true,
         validate: {
-          isAlpha: {
-            msg: "Name should only contain letters",
-          },
           len: {
             args: [2, 32],
-            msg: "Name should be between 2 and 32 characters",
+            msg: "Team name should be between 2 and 32 characters",
           },
         },
       },

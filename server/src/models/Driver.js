@@ -68,18 +68,7 @@ module.exports = (sequelize) => {
       image: {
         type: DataTypes.STRING,
         allowNull: false,
-        validate: {
-          isUrl: {
-            msg: "Must be a valid URL",
-          },
-          isImage(value) {
-            if (!/\.(jpg|jpeg|png|gif)$/i.test(value)) {
-              throw new Error(
-                "URL must point to an image file (.jpg, .jpeg, .png, .gif)"
-              );
-            }
-          },
-        },
+        isUrl: true
       },
     },
     { timestamps: false }

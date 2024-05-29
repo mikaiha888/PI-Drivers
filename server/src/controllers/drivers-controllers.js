@@ -7,9 +7,11 @@ const URL = "http://localhost:5000/drivers";
 
 const getAllDriversController = async () => {
   try {
-    const drivers = (await axios.get(URL)).data;
-    return await Promise.all(
-      drivers
+    const dbDrivers = await Driver.findAll();
+    const apiDrivers = await Promise.all(
+      (
+        await axios.get(URL)
+      ).data
         .filter((driver) => driver.id < 100)
         .map(async (driver) => {
           driver.image = await getImage(driver.image.url);
@@ -25,6 +27,7 @@ const getAllDriversController = async () => {
           };
         })
     );
+    return [...dbDrivers, ...apiDrivers];
   } catch (error) {
     throw error;
   }
@@ -100,18 +103,22 @@ const createDriverController = async (newDriverData) => {
         image: newDriverData.image,
       },
     });
-    const [newTeam] = await Team.findOrCreate({
-      where: {
-        name: newDriverData.teams,
-      },
+    const teamPromises = newDriverData.teams.map(async (team) => {
+      const [newTeam] = await Team.findOrCreate({
+        where: {
+          name: team,
+        },
+      });
+      return newTeam;
     });
-    console.log(newTeam);
-    await newDriver.addTeam(newTeam);
+    const newTeams = await Promise.all(teamPromises);
+    await newDriver.addTeams(newTeams);
     return {
       ...newDriver.dataValues,
-      teams: [newTeam],
+      teams: newTeams,
     };
   } catch (error) {
+    console.error('Error in createDriverController:', error);
     throw error;
   }
 };
