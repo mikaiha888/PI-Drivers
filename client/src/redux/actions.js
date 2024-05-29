@@ -1,6 +1,5 @@
 import axios from "axios";
 import {
-  FETCH_ERROR,
   GET_ALL_DRIVERS,
   GET_DRIVERS_BY_NAME,
   GET_DRIVER_BY_ID,
@@ -8,7 +7,9 @@ import {
   GET_ALL_TEAMS,
   SORT_DRIVERS,
   FILTER_DRIVERS,
-  CLEAR_DRIVERS
+  CLEAR_DRIVERS,
+  FETCH_ERROR,
+  HANDLE_ERROR
 } from "./action-type";
 
 const DRIVERS_URL = "http://localhost:3001/drivers";
@@ -110,3 +111,7 @@ export const sortDrivers = (sortOrder) => {
 export const clearDrivers = () => {
   return { type: CLEAR_DRIVERS };
 };
+
+export const handleError = () => ({
+  type: HANDLE_ERROR,
+});

@@ -18,17 +18,6 @@ const Pagination = ({ handlePage, current, total, children }) => {
 
   return (
     <div className={style.pagination}>
-        <div className={style.pagination_pages} >
-          {pages.map((page) => (
-            <button
-              key={page}
-              onClick={() => handlePage(page)}
-              className={current === page ? style.current : ""}
-            >
-              {page}
-            </button>
-          ))}
-        </div>
       <div className={style.pagination_arrows}>
         <button
           onClick={() => handlePage(current - 1)}
@@ -43,6 +32,17 @@ const Pagination = ({ handlePage, current, total, children }) => {
         >
           <ChevronRight />
         </button>
+      </div>
+      <div className={style.pagination_pages}>
+        {pages.map((page) => (
+          <button
+            key={page}
+            onClick={() => handlePage(page)}
+            className={current === page ? style.current : ""}
+          >
+            {page}
+          </button>
+        ))}
       </div>
     </div>
   );

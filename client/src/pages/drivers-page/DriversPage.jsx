@@ -45,7 +45,7 @@ const DriversPage = () => {
   return (
     <div className={style.driversPage}>
       <div className={style.driversPage_title}>
-        <h2>Ellos</h2>
+        <h2>Drivers</h2>
         <p>Comparte Tus Momentos de F1 con Nosotros</p>
       </div>
       <Filters
@@ -63,7 +63,7 @@ const DriversPage = () => {
           allDrivers={filteredDrivers.length ? filteredDrivers : allDrivers}
         />
       </Pagination>
-      <button onClick={openDialog}>Añadir driver</button>
+      <button className={style.button} onClick={openDialog}>Añadir driver</button>
       <Dialog isOpen={isDialogOpen} onClose={closeDialog}>
         <DriverForm />
       </Dialog>

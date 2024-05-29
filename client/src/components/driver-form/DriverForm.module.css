@@ -1,0 +1,10 @@
+.form button {
+    color: white;
+    background-color: #b91c1c;
+}
+
+.form  button:disabled {
+    color: #9ca3af;
+    background-color: #e5e7eb;
+    cursor: default;
+}

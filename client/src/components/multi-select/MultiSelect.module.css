@@ -1,0 +1,13 @@
+.multi_select select {
+  width: 20rem;
+  padding: .5rem .75rem;
+  margin-top: .25rem;
+  border: solid 2px #d4d4d8;
+  border-radius: .75rem;
+}
+
+.multi_select p {
+  margin-left: .25rem;
+  margin-top: .25rem;
+  color: red;
+}

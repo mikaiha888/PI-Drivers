@@ -6,7 +6,9 @@ import {
   GET_DRIVERS_BY_NAME,
   GET_DRIVER_BY_ID,
   SORT_DRIVERS,
-  CLEAR_DRIVERS
+  CLEAR_DRIVERS,
+  FETCH_ERROR,
+  HANDLE_ERROR
 } from "./action-type";
 
 const initialState = {
@@ -15,7 +17,7 @@ const initialState = {
   driver: {},
   team: {},
   filteredDrivers: [],
-  errors: null,
+  fetchError: null,
 };
 
 const reducer = (state = initialState, action) => {
@@ -82,20 +84,20 @@ const reducer = (state = initialState, action) => {
       if (action.payload.sortBy === "name") {
         sortedDrivers =
           action.payload.sort === "ascending"
-            ? sortedDrivers.sort((a, b) =>
+            ? state.filteredDrivers.sort((a, b) =>
                 a.firstName.localeCompare(b.firstName)
               )
-            : sortedDrivers.sort((a, b) =>
+            : state.filteredDrivers.sort((a, b) =>
                 b.firstName.localeCompare(a.firstName)
               );
       }
       if (action.payload.sortBy === "dob") {
         sortedDrivers =
           action.payload.sort === "descending"
-            ? sortedDrivers.sort(
+            ? state.filteredDrivers.sort(
                 (a, b) => new Date(a.dateOfBirth) - new Date(b.dateOfBirth)
               )
-            : sortedDrivers.sort(
+            : state.filteredDrivers.sort(
                 (a, b) => new Date(b.dateOfBirth) - new Date(a.dateOfBirth)
               );
       }
@@ -109,6 +111,18 @@ const reducer = (state = initialState, action) => {
         ...state,
         filteredDrivers: [],
       };
+
+      case FETCH_ERROR:
+        return {
+          ...state,
+          fetchError: [action.payload],
+        };
+  
+      case HANDLE_ERROR:
+        return {
+          ...state,
+          fetchError: state.fetchError.slice(1),
+        };
 
     default:
       return {

@@ -9,4 +9,5 @@ export const FILTER_DRIVERS = "FILTER_DRIVERS"
 export const SORT_DRIVERS = "SORT_DRIVERS"
 export const CLEAR_DRIVERS = "CLEAR_DRIVERS"
 
-export const FETCH_ERROR = "FETCH_ERROR";
+export const FETCH_ERROR = 'FETCH_ERROR';
+export const HANDLE_ERROR = 'HANDLE_ERROR';

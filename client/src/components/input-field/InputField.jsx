@@ -1,3 +1,5 @@
+import style from "./InputField.module.css";
+
 const InputField = ({
   label,
   name,
@@ -9,7 +11,7 @@ const InputField = ({
   focused,
 }) => {
   return (
-    <div>
+    <div className={style.input_field}>
       <label>{label}</label>
       <br />
       <input

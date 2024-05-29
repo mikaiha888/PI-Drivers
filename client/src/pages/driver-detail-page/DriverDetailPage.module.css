@@ -1,3 +1,93 @@
 .driver_detail_page {
+  width: 60%;
+  padding: 3rem 5rem;
+  margin: auto;
+  margin-bottom: 3rem;
+  border-radius: 3rem;
+  background-color: white;
+  display: flex;
+  justify-content: space-between;
+  gap: 3rem;
+}
 
+.driver_detail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+}
+
+.driver_detail h2 {
+margin-top: 1rem;
+  font-size: 2rem;
+  text-align: center;
+}
+
+.nationality {
+    padding: .25rem .75rem;
+    border-radius: 1rem;
+    color: #b91c1c;
+    font-weight: 700;
+    text-align: center;
+}
+
+.driver_detail p {
+    color: black;
+    font-weight: 700;
+    text-align: center;
+}
+
+.dob {
+    padding: .25rem 3rem;
+    border-radius: 2rem;
+    color: white;
+    background-color: #b91c1c;
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.5rem;
+}
+
+.img_container {
+  width: 18rem;
+  height: 18rem;
+  border-radius: 2rem;
+  background: white;
+  overflow: hidden;
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1),
+    0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+
+.img_container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.driver_detail_info h3 {
+    margin: 1rem 2rem;
+}
+
+.description {
+    padding: 2rem 3rem;
+    border-radius: 2rem;
+    background-color: #e5e7eb;
+    line-height: 1.5rem;
+}
+
+.teams {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: .5rem;
+}
+
+.teams div {
+    padding: .25rem .75rem;
+    border-radius: 1rem;
+    color: white;
+    background-color: black;
+    text-align: center;
 }

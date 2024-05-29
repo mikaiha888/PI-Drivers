@@ -1,0 +1,22 @@
+.input_field {
+    margin-bottom: 1rem;
+    text-align: left;
+}
+
+.input_field input {
+    width: 20rem;
+    padding: .5rem .75rem;
+    margin-top: .25rem;
+    border: solid 2px #d4d4d8;
+    border-radius: 9999px;
+}
+
+.input_field label {
+    margin-left: .5rem;
+}
+
+.input_field p {
+    margin-left: .25rem;
+    margin-top: .25rem;
+    color: red;
+}

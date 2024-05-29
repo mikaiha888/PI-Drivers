@@ -1,3 +1,4 @@
+import style from './Filters.module.css';
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { clearDrivers, filterDrivers, getAllTeams, sortDrivers } from "../../redux/actions";
@@ -32,6 +33,7 @@ const Filters = ({ handlePage, isCreated }) => {
     if (name === "byDb") setFilterByDb(value);
     dispatch(filterDrivers([name, value]));
     handlePage();
+    navigate('')
   };
 
   const handleClear = () => {
@@ -50,8 +52,8 @@ const Filters = ({ handlePage, isCreated }) => {
   }, []);
 
   return (
-    <div>
-      <div>
+    <div className={style.filters}>
+      <div className={style.sort}>
         <span>Ordenar por: </span>
         <select name="sortBy" value={sortOrder.sortBy} onChange={handleSort}>
           <option value="name">Nombre del driver</option>
@@ -62,7 +64,7 @@ const Filters = ({ handlePage, isCreated }) => {
           <option value="descending">Descendente</option>
         </select>
       </div>
-      <div>
+      <div className={style.filter}>
         <span>Equipos: </span>
         <select name="byTeams" value={filterByTeams} onChange={handleFilter}>
           <option value="all">All teams</option>

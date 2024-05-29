@@ -1,6 +1,8 @@
 import "./App.css";
 import { Routes, Route, Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
+import Error from "./components/error/Error";
 import NavBar from "./components/nav-bar/NavBar";
 import HomePage from "./pages/home-page/HomePage";
 import TeamsPage from "./pages/teams-page/TeamsPage";
@@ -9,8 +11,10 @@ import AboutUsPage from "./pages/about-us-page/AboutUsPage";
 import DriverDetailPage from "./pages/driver-detail-page/DriverDetailPage";
 
 function App() {
+  const { fetchError } = useSelector((state) => state);
   return (
     <div className="container">
+      {fetchError && <Error error={fetchError} />}
       <NavBar />
       <main>
         <Routes>

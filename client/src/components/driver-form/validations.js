@@ -59,11 +59,11 @@ const validation = (driverData) => {
     errors.image = "*El campo imagen es obligatorio";
   } else if (!isValidImageUrl(driverData.image)) {
     errors.image =
-      "*La URL de la imagen no es válida o no tiene la extensión .jpg, .jpeg, .png, .gif";
+      "*No tiene la extensión .jpg, .jpeg, .png, .gif";
   }
 
-  if (!driverData.teams || driverData.teams.length === 0) {
-    errors.temperament = "*Selecciona al menos un temperamento";
+  if (!driverData.teams || !driverData.teams.length) {
+    errors.teams = "*Selecciona al menos un equipo";
   }
 
   return errors;

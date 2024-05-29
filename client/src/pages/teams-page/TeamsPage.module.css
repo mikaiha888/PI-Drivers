@@ -1,0 +1,34 @@
+.teamsPage {
+  width: 100%;
+  text-align: center;
+}
+
+.teamsPage_title {
+  margin-bottom: 3rem;
+}
+
+.teamsPage_title h2 {
+  color: #b91c1c;
+  font-size: 3rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.25rem;
+}
+
+.teamsPage_title p {
+  margin-top: 1.5rem;
+  font-size: 1.125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.25rem;
+}
+
+.teams {
+    width: 90%;
+    padding: 1rem 3rem;
+    margin: 5rem auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+}
